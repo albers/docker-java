@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.model;
-
 import static com.github.dockerjava.api.model.InternetProtocol.TCP;
 import static com.github.dockerjava.api.model.InternetProtocol.UDP;
+import static org.apache.commons.lang.StringUtils.splitByWholeSeparator;
 
 import java.io.IOException;
 import java.util.Map.Entry;
@@ -117,7 +117,7 @@ public class ExposedPort {
 	 */
 	public static ExposedPort parse(String serialized) throws IllegalArgumentException {
 		try {
-			String[] parts = serialized.split("/");
+			String[] parts = splitByWholeSeparator(serialized, "/");
 			switch (parts.length) {
 			case 1:
 				return new ExposedPort(Integer.valueOf(parts[0]));

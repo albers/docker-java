@@ -44,6 +44,11 @@ public class BindTest {
 		Bind.parse("nonsense");
 	}
 
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void parseInputWithTrailingSeparator() {
+		Bind.parse("/host:/container:ro:");
+	}
+
 	@Test(expectedExceptions = IllegalArgumentException.class, 
 			expectedExceptionsMessageRegExp = "Error parsing Bind 'null'")
 	public void parseNull() {

@@ -19,6 +19,11 @@ public class LinkTest {
 		Link.parse("nonsense");
 	}
 
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void parseInputWithTrailingSeparator() {
+		Link.parse("name:alias:");
+	}
+
 	@Test(expectedExceptions = IllegalArgumentException.class, 
 			expectedExceptionsMessageRegExp = "Error parsing Link 'null'")
 	public void parseNull() {

@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import static org.apache.commons.lang.StringUtils.isEmpty;
+import static org.apache.commons.lang.StringUtils.splitByWholeSeparator;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -206,7 +207,7 @@ public class Ports {
                     return new Binding();
                 }
 
-                String[] parts = serialized.split(":");
+                String[] parts = splitByWholeSeparator(serialized, ":");
                 switch (parts.length) {
                 case 2: {
                     return new Binding(parts[0], Integer.valueOf(parts[1]));

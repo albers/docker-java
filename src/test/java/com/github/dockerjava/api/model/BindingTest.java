@@ -34,6 +34,11 @@ public class BindingTest {
 		Binding.parse("nonsense");
 	}
 
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void parseInputWithTrailingSeparator() {
+		Binding.parse("127.0.0.1:80:");
+	}
+
 	@Test(expectedExceptions = IllegalArgumentException.class, 
 			expectedExceptionsMessageRegExp = "Error parsing Binding 'null'")
 	public void parseNull() {

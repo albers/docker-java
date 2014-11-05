@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.model;
 
+import static org.apache.commons.lang.StringUtils.splitByWholeSeparator;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -60,7 +62,7 @@ public class Link
 	public static Link parse(final String serialized) throws IllegalArgumentException
 	{
 		try {
-			final String[] parts = serialized.split(":");
+			final String[] parts = splitByWholeSeparator(serialized, ":");
 			switch (parts.length) {
 			case 2: {
 				return new Link(parts[0], parts[1]);

@@ -32,6 +32,11 @@ public class ExposedPortTest {
 		ExposedPort.parse(null);
 	}
 
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void parseInputWithTrailingSeparator() {
+		ExposedPort.parse("80/tcp/");
+	}
+
 	@Test
 	public void stringify() {
 		assertEquals(ExposedPort.parse("80/tcp").toString(), "80/tcp");

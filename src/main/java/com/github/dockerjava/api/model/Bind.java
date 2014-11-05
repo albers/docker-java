@@ -2,6 +2,7 @@ package com.github.dockerjava.api.model;
 
 import static com.github.dockerjava.api.model.AccessMode.ro;
 import static com.github.dockerjava.api.model.AccessMode.rw;
+import static org.apache.commons.lang.StringUtils.splitByWholeSeparator;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -66,7 +67,7 @@ public class Bind {
 	 */
 	public static Bind parse(String serialized) {
 		try {
-			String[] parts = serialized.split(":");
+			String[] parts = splitByWholeSeparator(serialized, ":");
 			switch (parts.length) {
 			case 2: {
 				return new Bind(parts[0], Volume.parse(parts[1]));

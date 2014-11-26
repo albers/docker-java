@@ -107,16 +107,12 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 
 	@Test
 	public void testPullNonExistingImage() throws DockerException, IOException {
-		
-		// does not throw an exception
 		dockerClient.pullImageCmd("nonexisting/foo").exec();
-		
-		try {
-			dockerClient.pullImageCmd("non-existing/foo").exec();
-			fail("expected InternalServerErrorException");
-		} catch (InternalServerErrorException e) {
-		}
-		
 	}
 
+	@Test(expectedExceptions=InternalServerErrorException.class, 
+			expectedExceptionsMessageRegExp="Invalid namespace name \\(non-existing\\).*\n")
+	public void testPullNonExistingImageWithIllegalName() throws DockerException, IOException {
+		dockerClient.pullImageCmd("non-existing/foo").exec();
+	}
 }

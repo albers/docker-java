@@ -45,24 +45,33 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 	}
 
 	@Test
-	public void createContainerWithExistingName() throws DockerException {
-
+	public void createContainerWithName() throws DockerException {
 		String containerName = "generated_" + new SecureRandom().nextInt();
+		CreateContainerResponse container = createContainerWithName(containerName);
+	
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+	
+		assertThat(inspectContainerResponse.getName(), equalTo("/" + containerName));
+	}
 
+	private CreateContainerResponse createContainerWithName(String containerName) {
 		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withCmd("env")
 				.withName(containerName).exec();
-
+	
 		LOG.info("Created container {}", container.toString());
-
+	
 		assertThat(container.getId(), not(isEmptyString()));
+		return container;
+	}
 
-		try {
-			dockerClient.createContainerCmd("busybox").withCmd("env")
-					.withName(containerName).exec();
-			fail("expected ConflictException");
-		} catch (ConflictException e) {
-		}
+	@Test(expectedExceptions=ConflictException.class)
+	public void createContainerWithExistingName() throws DockerException {
+		String containerName = "generated_" + new SecureRandom().nextInt();
+		
+		createContainerWithName(containerName);
+		createContainerWithName(containerName); // fails
 	}
 
 	@Test
@@ -132,31 +141,6 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
 		assertThat(asString(dockerClient.logContainerCmd(container.getId())
 				.withStdOut().exec()), containsString("HOSTNAME=docker-java"));
-	}
-
-	@Test
-	public void createContainerWithName() throws DockerException {
-
-		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withName("container")
-				.withCmd("env").exec();
-
-		LOG.info("Created container {}", container.toString());
-
-		assertThat(container.getId(), not(isEmptyString()));
-
-		InspectContainerResponse inspectContainerResponse = dockerClient
-				.inspectContainerCmd(container.getId()).exec();
-
-		assertThat(inspectContainerResponse.getName(), equalTo("/container"));
-
-		try {
-			dockerClient.createContainerCmd("busybox").withName("container")
-					.withCmd("env").exec();
-			fail("Expected ConflictException");
-		} catch (ConflictException e) {
-		}
-
 	}
 
 }
